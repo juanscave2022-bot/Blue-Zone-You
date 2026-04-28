@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue Zone You — Unlock Your Longevity Blueprint</title>
+  <meta name="description" content="Blue Zone You is a longevity clinic in Daytona Beach powered by genetic testing. Discover your unique blueprint for a longer, healthier life." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwindcss.config = {
+      theme: { extend: {
+        fontFamily: { heading: ["'DM Serif Display'","serif"], body: ["'Inter'","sans-serif"] },
+        colors: { brand: { gold: "#C5A33B", "gold-light": "#D4B84E", navy: "#1B2A4A", "navy-deep": "#0F1B33", "navy-light": "#253A5C", cream: "#F5F0E8", cyan: "#06b6d4", teal: "#14b8a6", dark: "#0A0A0A" } }
+      }}
+    };
+  </script>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    /* Canvas fixed background */
+    #frame-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Scroll container drives the animation */
+    .scroll-spacer {
+      height: 400vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Section overlays on the canvas */
+    .canvas-section {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    /* Text readability — keep light during animation, darken only at the end */
+    .text-overlay {
+      background: rgba(10,10,10,0.25);
+    }
+    .text-overlay-center {
+      background: rgba(10,10,10,0.5);
+    }
+    .canvas-section:nth-child(1) { background: rgba(10,10,10,0.15); }
+    .canvas-section:nth-child(2) { background: rgba(10,10,10,0.25); }
+    .canvas-section:nth-child(3) { background: rgba(10,10,10,0.35); }
+    .canvas-section:nth-child(4) { background: rgba(10,10,10,0.55); }
+
+    /* Fade-in animation */
+    .fade-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    }
+    .fade-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Loading overlay */
+    #loading-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #0A0A0A;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s ease-out;
+    }
+    #loading-overlay.done {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loader-bar {
+      width: 200px;
+      height: 2px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 1px;
+      overflow: hidden;
+      margin-top: 1.5rem;
+    }
+    .loader-fill {
+      height: 100%;
+      background: #C5A33B;
+      border-radius: 1px;
+      width: 0%;
+      transition: width 0.15s linear;
+    }
+
+    /* Reduced motion fallback */
+    @media (prefers-reduced-motion: reduce) {
+      .fade-section { opacity: 1; transform: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div id="loading-overlay">
+    <img src="/bzy-icon-white.png" alt="Blue Zone You" style="width:64px;height:64px;opacity:0.7;" />
+    <div class="loader-bar"><div class="loader-fill" id="loader-fill"></div></div>
+    <p class="text-xs text-white/40 font-body mt-4">Loading experience...</p>
+  </div>
+
+  <!-- Canvas -->
+  <canvas id="frame-canvas"></canvas>
+
+  <!-- Nav -->
+  <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="background:rgba(10,10,10,0.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);"></nav>
+
+  <!-- Scroll-driven sections (400vh total) -->
+  <div class="scroll-spacer">
+
+    <!-- SECTION 1 — HERO (0vh - 100vh) -->
+    <div class="canvas-section text-overlay" id="section-hero">
+      <div class="fade-section w-full px-6 md:px-16 lg:px-20 pt-24">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <!-- Left: Text -->
+          <div>
+            <div class="inline-flex items-center gap-2 liquid-glass rounded-full pr-4 mb-6">
+              <span class="bg-brand-gold text-white rounded-full px-3.5 py-1 text-xs font-semibold font-body">New</span>
+              <span class="text-sm text-white/90 font-body">Now in Daytona Beach</span>
+            </div>
+            <h1 class="font-heading text-white text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] leading-[1.1] tracking-[-2px] mb-6">
+              <span class="whitespace-nowrap">Physician Led,</span><br/><span class="text-brand-gold italic">Research Backed</span>
+            </h1>
+            <p class="text-base md:text-lg text-white/75 font-body font-light leading-relaxed max-w-xl mb-8">
+              Advanced peptide therapy and precision genetic testing, guided by board-certified physicians who specialize in longevity medicine. Your unique biology drives every protocol we build.
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="/pages/book.html" class="bg-brand-gold text-white rounded-xl px-7 py-3.5 text-sm font-semibold font-body flex items-center gap-2 hover:brightness-110 transition-all shadow-lg shadow-brand-gold/20">
+                Get Your Genetic Test
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </a>
+              <a href="#section-process" class="liquid-glass rounded-xl px-7 py-3.5 text-sm font-medium text-white font-body flex items-center gap-2 hover:bg-white/10 transition-colors">
+                See How It Works
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right: Before/After Slider -->
+          <div class="hidden lg:flex justify-center items-center">
+            <div id="ba-slider" class="relative w-[420px] h-[420px] rounded-[40%_60%_55%_45%/60%_40%_60%_40%] overflow-hidden border-2 border-brand-gold/20 shadow-2xl" style="cursor:none;">
+              <!-- After (bottom layer - youthful) -->
+              <img src="/img/after.jpg" alt="After optimization" class="absolute inset-0 w-full h-full object-cover object-center" />
+              <!-- Before (top layer - clipped) -->
+              <div id="ba-before" class="absolute inset-0 overflow-hidden" style="width:50%;">
+                <img src="/img/before.jpg" alt="Before optimization" class="absolute inset-0 w-[420px] h-full object-cover object-center" style="max-width:none;" />
+              </div>
+              <!-- Divider line -->
+              <div id="ba-line" class="absolute top-0 bottom-0 w-[2px] bg-white/80 z-20" style="left:50%;"></div>
+              <!-- Labels -->
+              <div class="absolute bottom-4 left-4 z-30 bg-black/50 backdrop-blur-sm rounded-full px-3 py-1 text-[10px] font-body text-white/80 tracking-widest uppercase">Before</div>
+              <div class="absolute bottom-4 right-4 z-30 bg-brand-gold/80 backdrop-blur-sm rounded-full px-3 py-1 text-[10px] font-body text-white tracking-widest uppercase">After</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 2 — THE PROCESS (100vh - 200vh) -->
+    <div class="canvas-section text-overlay" id="section-process">
+      <div class="fade-section max-w-2xl px-6 md:px-16 lg:px-20">
+        <p class="text-sm font-body text-brand-gold mb-4 tracking-widest uppercase">The Process</p>
+        <h2 class="font-heading text-white text-4xl md:text-5xl lg:text-6xl leading-[0.9] tracking-[-3px] mb-8">
+          One Test.<br/>Three Powerful <span class="text-brand-gold italic">Insights.</span>
+        </h2>
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <span class="font-heading italic text-brand-gold/40 text-4xl leading-none">01</span>
+            <div>
+              <h3 class="font-heading text-white text-xl mb-1">Simple Cheek Swab</h3>
+              <p class="text-sm text-white/60 font-body font-light leading-relaxed">A painless genetic sample collected at our clinic or shipped to your door.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <span class="font-heading italic text-brand-gold/40 text-4xl leading-none">02</span>
+            <div>
+              <h3 class="font-heading text-white text-xl mb-1">200+ Markers Analyzed</h3>
+              <p class="text-sm text-white/60 font-body font-light leading-relaxed">Our lab maps aging, metabolism, inflammation, cardiovascular, and cognitive genes.</p>
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <span class="font-heading italic text-brand-gold/40 text-4xl leading-none">03</span>
+            <div>
+              <h3 class="font-heading text-white text-xl mb-1">Your Longevity Blueprint</h3>
+              <p class="text-sm text-white/60 font-body font-light leading-relaxed">A comprehensive report with a personalized protocol designed by our clinicians.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 3 — THE THREE RESULTS (200vh - 300vh) -->
+    <div class="canvas-section" id="section-results">
+      <div class="fade-section w-full px-6 md:px-16 lg:px-20">
+        <div class="text-center mb-12">
+          <p class="text-sm font-body text-brand-gold mb-4 tracking-widest uppercase">What You'll Discover</p>
+          <h2 class="font-heading text-white text-4xl md:text-5xl lg:text-6xl leading-[0.9] tracking-[-3px]">
+            Three Keys to Your <span class="text-brand-gold italic">Longevity</span>
+          </h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+          <div class="liquid-glass-strong rounded-3xl p-7 text-center">
+            <div class="w-14 h-14 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center mx-auto mb-5">
+              <svg class="h-7 w-7 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="font-heading text-white text-2xl tracking-[-0.5px] mb-3">Biological Age</h3>
+            <p class="text-sm text-white/60 font-body font-light leading-relaxed">Discover your true cellular age, not just the number on your driver's license. Track how your interventions reverse aging over time.</p>
+          </div>
+          <div class="liquid-glass-strong rounded-3xl p-7 text-center">
+            <div class="w-14 h-14 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center mx-auto mb-5">
+              <svg class="h-7 w-7 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="font-heading text-white text-2xl tracking-[-0.5px] mb-3">DNA Blueprint</h3>
+            <p class="text-sm text-white/60 font-body font-light leading-relaxed">Map your genetic predispositions across 200+ longevity markers. Understand what your body needs at the molecular level.</p>
+          </div>
+          <div class="liquid-glass-strong rounded-3xl p-7 text-center">
+            <div class="w-14 h-14 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center mx-auto mb-5">
+              <svg class="h-7 w-7 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <h3 class="font-heading text-white text-2xl tracking-[-0.5px] mb-3">Vitality Score</h3>
+            <p class="text-sm text-white/60 font-body font-light leading-relaxed">Get a personalized roadmap to optimize your healthspan. Actionable protocols, not vague advice.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4 — FINAL CTA (300vh - 400vh) -->
+    <div class="canvas-section text-overlay-center" id="section-cta">
+      <div class="fade-section max-w-3xl mx-auto text-center px-6">
+        <img src="/bzy-icon-white.png" alt="" class="w-24 h-24 object-contain mx-auto mb-8 opacity-80" />
+        <h2 class="font-heading text-white text-4xl md:text-5xl lg:text-6xl leading-[0.9] tracking-[-3px] mb-6">
+          Ready to Decode<br/>Your <span class="text-brand-gold italic">Longevity?</span>
+        </h2>
+        <p class="text-base text-white/65 font-body font-light leading-relaxed max-w-xl mx-auto mb-8">
+          Join the longevity revolution with Blue Zone You's genetic testing. Your blueprint for a longer, better life is waiting inside your DNA.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <a href="/pages/book.html" class="bg-brand-gold text-white rounded-xl px-8 py-4 text-base font-semibold font-body flex items-center gap-2 hover:brightness-110 transition-all shadow-lg shadow-brand-gold/20">
+            Schedule Your Consultation
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <a href="tel:+13865551234" class="liquid-glass rounded-xl px-8 py-4 text-base font-medium text-white font-body flex items-center gap-2 hover:bg-white/10 transition-colors">
+            (386) 555-1234
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="flex flex-wrap items-stretch justify-center gap-4 mt-16">
+          <div class="liquid-glass rounded-2xl p-5 w-44">
+            <span class="font-heading italic text-brand-gold text-3xl tracking-[-1px] leading-none">200+</span>
+            <p class="text-[11px] text-white/50 font-body font-light mt-2">Genetic Markers</p>
+          </div>
+          <div class="liquid-glass rounded-2xl p-5 w-44">
+            <span class="font-heading italic text-brand-gold text-3xl tracking-[-1px] leading-none">97%</span>
+            <p class="text-[11px] text-white/50 font-body font-light mt-2">Satisfaction Rate</p>
+          </div>
+          <div class="liquid-glass rounded-2xl p-5 w-44">
+            <span class="font-heading italic text-brand-gold text-3xl tracking-[-1px] leading-none">2-3wk</span>
+            <p class="text-[11px] text-white/50 font-body font-light mt-2">Results Turnaround</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Below the scroll animation: regular content sections -->
+
+  <!-- Clinic Image Banner -->
+  <section class="section-block bg-brand-dark py-12">
+    <div class="max-w-7xl mx-auto px-6 md:px-16 lg:px-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="rounded-3xl overflow-hidden">
+          <img src="/img/clinic-lobby.jpg" alt="Blue Zone You clinic lobby in Daytona Beach" class="w-full h-64 md:h-80 object-cover" loading="lazy" />
+        </div>
+        <div class="rounded-3xl overflow-hidden">
+          <img src="/img/clinic-consult.jpg" alt="Blue Zone You clinician consultation" class="w-full h-64 md:h-80 object-cover" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Overview -->
+  <section class="section-block bg-brand-dark relative py-24 lg:py-32">
+    <div class="max-w-7xl mx-auto px-6 md:px-16 lg:px-20">
+      <p class="text-sm font-body text-brand-gold mb-4 tracking-widest uppercase">Our Services</p>
+      <h2 class="font-heading text-white text-5xl md:text-6xl lg:text-[5rem] leading-[0.9] tracking-[-3px] mb-6">
+        Longevity, <span class="text-brand-gold italic">Redefined</span>
+      </h2>
+      <p class="text-base text-white/60 font-body font-light max-w-xl mb-16">Every protocol begins with your genetic data. We test, analyze, and build a plan unique to your biology.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="/pages/genetic-testing.html" class="liquid-glass rounded-3xl p-7 flex flex-col min-h-[280px] group hover:bg-white/[0.04] transition-colors cursor-pointer">
+          <div class="w-11 h-11 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center mb-4">
+            <svg class="h-5 w-5 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 014.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="flex-1"></div>
+          <h3 class="font-heading text-white text-2xl tracking-[-0.5px] mb-2 group-hover:text-brand-gold transition-colors">Genetic Testing</h3>
+          <p class="text-sm text-white/60 font-body font-light leading-relaxed">200+ markers analyzed to build your longevity blueprint.</p>
+        </a>
+        <a href="/pages/hormones.html" class="liquid-glass rounded-3xl p-7 flex flex-col min-h-[280px] group hover:bg-white/[0.04] transition-colors cursor-pointer">
+          <div class="w-11 h-11 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center mb-4">
+            <svg class="h-5 w-5 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="flex-1"></div>
+          <h3 class="font-heading text-white text-2xl tracking-[-0.5px] mb-2 group-hover:text-brand-gold transition-colors">Hormones</h3>
+          <p class="text-sm text-white/60 font-body font-light leading-relaxed">Bioidentical HRT, testosterone, and thyroid optimization.</p>
+        </a>
+        <a href="/pages/weight-body.html" class="liquid-glass rounded-3xl p-7 flex flex-col min-h-[280px] group hover:bg-white/[0.04] transition-colors cursor-pointer">
+          <div class="w-11 h-11 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center mb-4">
+            <svg class="h-5 w-5 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="flex-1"></div>
+          <h3 class="font-heading text-white text-2xl tracking-[-0.5px] mb-2 group-hover:text-brand-gold transition-colors">Weight & Body</h3>
+          <p class="text-sm text-white/60 font-body font-light leading-relaxed">Metabolic weight loss, GLP-1 therapy, and nutrition guidance.</p>
+        </a>
+        <a href="/pages/wellness.html" class="liquid-glass rounded-3xl p-7 flex flex-col min-h-[280px] group hover:bg-white/[0.04] transition-colors cursor-pointer">
+          <div class="w-11 h-11 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center mb-4">
+            <svg class="h-5 w-5 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="flex-1"></div>
+          <h3 class="font-heading text-white text-2xl tracking-[-0.5px] mb-2 group-hover:text-brand-gold transition-colors">Wellness</h3>
+          <p class="text-sm text-white/60 font-body font-light leading-relaxed">IV therapy, peptides, NAD+, red light, and hyperbaric oxygen.</p>
+        </a>
+        <a href="/pages/aesthetics.html" class="liquid-glass rounded-3xl p-7 flex flex-col min-h-[280px] group hover:bg-white/[0.04] transition-colors cursor-pointer">
+          <div class="w-11 h-11 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center mb-4">
+            <svg class="h-5 w-5 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="flex-1"></div>
+          <h3 class="font-heading text-white text-2xl tracking-[-0.5px] mb-2 group-hover:text-brand-gold transition-colors">Aesthetics</h3>
+          <p class="text-sm text-white/60 font-body font-light leading-relaxed">Skin rejuvenation, hair restoration, and body contouring.</p>
+        </a>
+        <a href="/pages/about.html" class="liquid-glass rounded-3xl p-7 flex flex-col min-h-[280px] group hover:bg-white/[0.04] transition-colors cursor-pointer">
+          <div class="w-11 h-11 rounded-2xl bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center mb-4">
+            <svg class="h-5 w-5 text-brand-gold" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div class="flex-1"></div>
+          <h3 class="font-heading text-white text-2xl tracking-[-0.5px] mb-2 group-hover:text-brand-gold transition-colors">Longevity Medicine</h3>
+          <p class="text-sm text-white/60 font-body font-light leading-relaxed">Comprehensive protocols for cardiovascular, metabolic, and cognitive health.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section-block bg-brand-dark relative py-24 lg:py-32 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-6 md:px-16 lg:px-20">
+      <p class="text-sm font-body text-brand-gold mb-4 tracking-widest uppercase">Results</p>
+      <h2 class="font-heading text-white text-5xl md:text-6xl leading-[0.9] tracking-[-3px] mb-16">Real People, Real <span class="text-brand-gold italic">Results</span></h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="liquid-glass rounded-3xl p-7 flex flex-col">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center">
+              <span class="font-heading italic text-brand-gold text-sm">S</span>
+            </div>
+            <div>
+              <p class="text-sm text-white font-body font-medium">Sarah M.</p>
+              <p class="text-xs text-white/50 font-body">Age 52</p>
+            </div>
+          </div>
+          <p class="text-sm text-white/60 font-body font-light leading-relaxed flex-1">"My genetic test revealed inflammation markers I never knew about. Six months in, my energy is through the roof."</p>
+          <div class="mt-5 pt-5 border-t border-white/5">
+            <span class="text-xs text-brand-gold font-body font-medium">Biological age reduced by 8 years</span>
+          </div>
+        </div>
+        <div class="liquid-glass rounded-3xl p-7 flex flex-col">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center">
+              <span class="font-heading italic text-brand-gold text-sm">J</span>
+            </div>
+            <div>
+              <p class="text-sm text-white font-body font-medium">James R.</p>
+              <p class="text-xs text-white/50 font-body">Age 44</p>
+            </div>
+          </div>
+          <p class="text-sm text-white/60 font-body font-light leading-relaxed flex-1">"The personalized supplement and nutrition plan they built from my results has been a game-changer. I feel like I did in my 30s."</p>
+          <div class="mt-5 pt-5 border-t border-white/5">
+            <span class="text-xs text-brand-gold font-body font-medium">Metabolic markers improved 40%</span>
+          </div>
+        </div>
+        <div class="liquid-glass rounded-3xl p-7 flex flex-col">
+          <div class="flex items-center gap-3 mb-5">
+            <div class="w-11 h-11 rounded-full bg-brand-gold/10 border border-brand-gold/20 flex items-center justify-center">
+              <span class="font-heading italic text-brand-gold text-sm">L</span>
+            </div>
+            <div>
+              <p class="text-sm text-white font-body font-medium">Dr. Lisa K.</p>
+              <p class="text-xs text-white/50 font-body">Age 61</p>
+            </div>
+          </div>
+          <p class="text-sm text-white/60 font-body font-light leading-relaxed flex-1">"As a physician, I appreciate the scientific rigor. The genetic analysis is thorough, and the protocols actually work."</p>
+          <div class="mt-5 pt-5 border-t border-white/5">
+            <span class="text-xs text-brand-gold font-body font-medium">Cardiovascular risk reduced significantly</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Telehealth CTA with Image -->
+  <section class="section-block bg-brand-dark relative py-20 border-t border-white/5">
+    <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse at 50% 50%, rgba(197,163,59,0.06) 0%, transparent 60%);"></div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6 md:px-16 lg:px-20">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        <div class="rounded-3xl overflow-hidden">
+          <img src="/img/clinic-consult.jpg" alt="Blue Zone You clinician consultation" class="w-full h-72 object-cover" loading="lazy" />
+        </div>
+        <div>
+          <p class="text-sm font-body text-brand-gold mb-3 tracking-widest uppercase">Get Started</p>
+          <h2 class="font-heading italic text-white text-3xl md:text-4xl tracking-[-1px] mb-4">Your Free Telehealth Consultation</h2>
+          <p class="text-sm text-white/60 font-body font-light mb-6 leading-relaxed">Speak with a longevity clinician from the comfort of your home. We will discuss your goals, review your health history, and recommend the right genetic testing and treatment pathway for your unique biology. No obligation, no pressure.</p>
+          <div class="flex flex-wrap gap-4">
+            <a href="/pages/book.html" class="bg-brand-gold text-white rounded-xl px-7 py-3.5 text-sm font-semibold font-body flex items-center gap-2 hover:brightness-110 transition-all shadow-lg shadow-brand-gold/20">
+              Book Free Consult
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a href="tel:+13865551234" class="liquid-glass rounded-xl px-7 py-3.5 text-sm font-medium text-white font-body flex items-center gap-2 hover:bg-white/10 transition-colors">(386) 555-1234</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="site-footer" class="section-block bg-brand-dark border-t border-white/5"></footer>
+
+  <!-- Sticky CTA -->
+  <div id="sticky-cta" class="fixed bottom-0 left-0 right-0 z-40 translate-y-full transition-transform duration-300" style="background:rgba(10,10,10,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);"></div>
+
+  <!-- Shared nav/footer/sticky -->
+  <script src="/shared.js"></script>
+  <script>initShared('home');</script>
+  <script src="/animations.js"></script>
+
+  <!-- Before/After Slider -->
+  <script>
+  (function() {
+    var slider = document.getElementById('ba-slider');
+    var before = document.getElementById('ba-before');
+    var line = document.getElementById('ba-line');
+    if (!slider || !before || !line) return;
+
+    function update(x) {
+      var rect = slider.getBoundingClientRect();
+      var pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+      before.style.width = (pct * 100) + '%';
+      line.style.left = (pct * 100) + '%';
+    }
+
+    // Mouse move (no click needed)
+    slider.addEventListener('mousemove', function(e) {
+      update(e.clientX);
+    });
+
+    // Touch support
+    slider.addEventListener('touchmove', function(e) {
+      update(e.touches[0].clientX);
+    }, { passive: true });
+
+    // Reset on leave
+    slider.addEventListener('mouseleave', function() {
+      before.style.transition = 'width 0.4s ease-out';
+      line.style.transition = 'left 0.4s ease-out';
+      before.style.width = '55%';
+      line.style.left = '55%';
+      setTimeout(function() {
+        before.style.transition = '';
+        line.style.transition = '';
+      }, 400);
+    });
+  })();
+  </script>
+
+  <!-- Canvas Scroll Animation -->
+  <script>
+  (function() {
+    const canvas = document.getElementById('frame-canvas');
+    const ctx = canvas.getContext('2d');
+    const overlay = document.getElementById('loading-overlay');
+    const loaderFill = document.getElementById('loader-fill');
+
+    const TOTAL_FRAMES = 120;
+    const isMobile = window.innerWidth < 768;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Mobile: load every 3rd frame (40 total). Reduced motion: just first and last.
+    let frameStep = 1;
+    let frameIndices = [];
+    if (reducedMotion) {
+      frameIndices = [1, TOTAL_FRAMES];
+    } else if (isMobile) {
+      frameStep = 3;
+      for (let i = 1; i <= TOTAL_FRAMES; i += frameStep) frameIndices.push(i);
+    } else {
+      for (let i = 1; i <= TOTAL_FRAMES; i++) frameIndices.push(i);
+    }
+
+    const images = [];
+    let loadedCount = 0;
+    let currentFrame = 0;
+    let targetFrame = 0;
+    let animating = false;
+
+    // Resize canvas
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawFrame(currentFrame);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Draw frame with cover-fit
+    function drawFrame(idx) {
+      if (!images[idx] || !images[idx].complete) return;
+      const img = images[idx];
+      const cw = canvas.width, ch = canvas.height;
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      const scale = Math.max(cw / iw, ch / ih);
+      const dw = iw * scale, dh = ih * scale;
+      const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.drawImage(img, dx, dy, dw, dh);
+    }
+
+    // Preload frames
+    function padNum(n) { return String(n).padStart(4, '0'); }
+
+    frameIndices.forEach(function(frameNum, arrIdx) {
+      const img = new Image();
+      img.src = '/frames/frame_' + padNum(frameNum) + '.jpg';
+      img.onload = function() {
+        loadedCount++;
+        const pct = Math.round((loadedCount / frameIndices.length) * 100);
+        if (loaderFill) loaderFill.style.width = pct + '%';
+        if (loadedCount === frameIndices.length) onAllLoaded();
+      };
+      img.onerror = function() {
+        loadedCount++;
+        if (loadedCount === frameIndices.length) onAllLoaded();
+      };
+      images[arrIdx] = img;
+    });
+
+    function onAllLoaded() {
+      // Hide loader
+      if (overlay) overlay.classList.add('done');
+      setTimeout(function() { if (overlay) overlay.style.display = 'none'; }, 700);
+      // Draw first frame
+      drawFrame(0);
+      // Start scroll listening
+      if (!reducedMotion) {
+        window.addEventListener('scroll', onScroll, { passive: true });
+        startLerp();
+      } else {
+        // Just show first frame, final frame at bottom
+        drawFrame(0);
+      }
+    }
+
+    function onScroll() {
+      const scrollTop = window.scrollY;
+      // The scroll-spacer is 400vh. Map scroll within that range to frames.
+      const spacerHeight = window.innerHeight * 4;
+      const scrollFraction = Math.min(Math.max(scrollTop / spacerHeight, 0), 1);
+      targetFrame = Math.floor(scrollFraction * (frameIndices.length - 1));
+    }
+
+    function startLerp() {
+      if (animating) return;
+      animating = true;
+      function tick() {
+        // Lerp toward target
+        const diff = targetFrame - currentFrame;
+        if (Math.abs(diff) > 0.5) {
+          currentFrame += diff * 0.12; // Smooth easing
+        } else {
+          currentFrame = targetFrame;
+        }
+        const roundedFrame = Math.round(currentFrame);
+        drawFrame(roundedFrame);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // Fade-in sections with IntersectionObserver
+    const fadeSections = document.querySelectorAll('.fade-section');
+    if ('IntersectionObserver' in window) {
+      const obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.15 });
+      fadeSections.forEach(function(el) { obs.observe(el); });
+    } else {
+      fadeSections.forEach(function(el) { el.classList.add('visible'); });
+    }
+  })();
+  </script>
+</body>
+</html>

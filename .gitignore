@@ -1,0 +1,5 @@
+.DS_Store
+*.ai
+clinic-lobby.png
+node_modules/
+.claude/
