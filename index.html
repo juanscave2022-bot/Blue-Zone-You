@@ -286,9 +286,7 @@
           <!-- Right: Video + Glass Toggle -->
           <div class="flex flex-col items-center gap-5">
             <div class="demo-video-wrap w-full max-w-[260px] lg:max-w-[280px]">
-              <video id="demo-video" muted playsinline preload="auto" class="playing">
-                <source src="/automation-demo.mp4" type="video/mp4" />
-              </video>
+              <video id="demo-video" muted playsinline preload="metadata" class="playing" src="/automation-demo.mp4#t=0.001"></video>
             </div>
             <div class="flex items-center gap-3">
               <span class="text-xs text-white/40 font-body uppercase tracking-widest" id="toggle-label">Before</span>
@@ -721,14 +719,39 @@
     if (!toggle || !video) return;
 
     var active = false;
+    var unlocked = false;
 
-    // Pause at first frame on load
-    video.addEventListener('loadeddata', function() {
-      video.currentTime = 0;
-      video.pause();
-    });
+    // iOS won't render frames until the video has played at least once.
+    // On first user tap we do a quick play->pause to prime the decoder,
+    // then proceed with the real toggle action.
+    function unlockVideo() {
+      return new Promise(function(resolve) {
+        if (unlocked) { resolve(); return; }
+        var p = video.play();
+        if (p && p.then) {
+          p.then(function() {
+            video.pause();
+            video.currentTime = 0;
+            unlocked = true;
+            resolve();
+          }).catch(function() {
+            // Autoplay blocked — still try to mark as unlocked
+            unlocked = true;
+            resolve();
+          });
+        } else {
+          // Old browser, no promise
+          setTimeout(function() {
+            video.pause();
+            video.currentTime = 0;
+            unlocked = true;
+            resolve();
+          }, 50);
+        }
+      });
+    }
 
-    // When video reaches the end, stay there
+    // When video reaches the end, stay on last frame
     video.addEventListener('ended', function() {
       video.pause();
     });
@@ -738,12 +761,12 @@
       toggle.classList.toggle('active', active);
 
       if (active) {
-        // Play forward from start to end
-        video.currentTime = 0;
-        video.play();
-        if (label) label.textContent = 'After';
+        unlockVideo().then(function() {
+          video.currentTime = 0;
+          video.play();
+          if (label) label.textContent = 'After';
+        });
       } else {
-        // Reset to first frame
         video.pause();
         video.currentTime = 0;
         if (label) label.textContent = 'Before';
