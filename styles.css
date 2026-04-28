@@ -275,6 +275,45 @@ a:focus-visible, button:focus-visible {
   background-color: #0A0A0A;
 }
 
+/* ═══ MOBILE RESPONSIVE FIXES ═══ */
+@media (max-width: 639px) {
+  /* Reduce hero top padding on subpages (pt-48 = 12rem is too much) */
+  section[class*="pt-48"] { padding-top: 7rem !important; }
+  section[class*="pt-32"] { padding-top: 5.5rem !important; }
+
+  /* Scale down stat numbers that overflow on small screens */
+  .font-heading.italic.text-5xl {
+    font-size: 2rem;
+    word-break: break-word;
+  }
+
+  /* Stat grid boxes need less padding on mobile */
+  .grid-cols-2 > div[class*="rounded-2xl"][class*="p-6"],
+  .grid > div[class*="rounded-2xl"][class*="p-6"] {
+    padding: 1rem;
+  }
+
+  /* Tighten h1 on subpages */
+  h1.text-5xl, h1[class*="text-5xl"] {
+    font-size: 2.25rem;
+    letter-spacing: -1px;
+  }
+
+  /* Ensure long service page headings don't overflow */
+  h1, h2 {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  }
+
+  /* Add bottom padding so sticky CTA doesn't cover footer content */
+  footer { padding-bottom: 4.5rem !important; }
+
+  /* Prevent horizontal overflow from any wide elements */
+  .max-w-7xl, .max-w-5xl, .max-w-3xl, .max-w-2xl {
+    max-width: 100%;
+  }
+}
+
 /* ═══ SCROLLBAR ═══ */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: #020617; }
