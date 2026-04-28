@@ -34,7 +34,7 @@
   <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" style="background:rgba(10,10,10,0.6);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,0.06);"></nav>
 
   <!-- Hero -->
-  <section class="relative min-h-[50vh] flex flex-col justify-end pt-40 pb-12 px-6 md:px-16 lg:px-20" style="background:linear-gradient(135deg, #0F1B33 0%, #1B2A4A 60%, #0A0A0A 100%);">
+  <section class="relative min-h-[50vh] flex flex-col justify-end pt-24 md:pt-40 pb-12 px-6 md:px-16 lg:px-20" style="background:linear-gradient(135deg, #0F1B33 0%, #1B2A4A 60%, #0A0A0A 100%);">
     <div class="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-brand-gold/40 to-transparent"></div>
     <div class="max-w-7xl mx-auto w-full">
       <nav class="flex items-center gap-2 text-xs font-body text-white/40 mb-6">
@@ -138,16 +138,16 @@
 
             <div>
               <label class="block text-sm font-body font-medium text-white/80 mb-2" for="preferred">Preferred Consultation Type</label>
-              <div class="grid grid-cols-2 gap-4">
-                <label class="flex items-center gap-3 rounded-xl px-5 py-3.5 border border-white/10 cursor-pointer hover:border-brand-gold/30 transition-all" style="background:rgba(27,42,74,0.3);">
-                  <input type="radio" name="consultType" value="telehealth" checked class="accent-brand-gold w-4 h-4" />
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <label class="flex items-center gap-3 rounded-xl px-4 sm:px-5 py-3 sm:py-3.5 border border-white/10 cursor-pointer hover:border-brand-gold/30 transition-all" style="background:rgba(27,42,74,0.3);">
+                  <input type="radio" name="consultType" value="telehealth" checked class="accent-brand-gold w-4 h-4 flex-shrink-0" />
                   <div>
                     <span class="text-sm font-body text-white">Telehealth</span>
                     <p class="text-xs text-white/40 font-body">Video call from home</p>
                   </div>
                 </label>
-                <label class="flex items-center gap-3 rounded-xl px-5 py-3.5 border border-white/10 cursor-pointer hover:border-brand-gold/30 transition-all" style="background:rgba(27,42,74,0.3);">
-                  <input type="radio" name="consultType" value="in-person" class="accent-brand-gold w-4 h-4" />
+                <label class="flex items-center gap-3 rounded-xl px-4 sm:px-5 py-3 sm:py-3.5 border border-white/10 cursor-pointer hover:border-brand-gold/30 transition-all" style="background:rgba(27,42,74,0.3);">
+                  <input type="radio" name="consultType" value="in-person" class="accent-brand-gold w-4 h-4 flex-shrink-0" />
                   <div>
                     <span class="text-sm font-body text-white">In-Person</span>
                     <p class="text-xs text-white/40 font-body">Visit our Daytona clinic</p>

@@ -135,7 +135,7 @@ function renderNav(activePage) {
 
   nav.innerHTML = `
     ${topBar}
-    <div class="flex items-center justify-between px-6 lg:px-16 py-1">
+    <div class="flex items-center justify-between px-6 lg:px-16 py-2 lg:py-1">
       <a href="/index.html" class="flex-shrink-0">
         <img src="/bzy-header-logo.png" alt="Blue Zone You" class="h-6 lg:h-7 object-contain" />
       </a>
@@ -249,17 +249,17 @@ function renderStickyCTA() {
   if (!cta) return;
 
   cta.innerHTML = `
-    <div class="flex items-center justify-between px-6 lg:px-16 py-3">
+    <div class="flex items-center justify-between px-4 sm:px-6 lg:px-16 py-2.5">
       <div class="hidden md:flex items-center gap-3">
         <img src="/bzy-icon-white.png" alt="" class="w-7 h-7 object-contain" />
         <span class="text-sm text-white/80 font-body">Unlock your longevity blueprint with genetic testing</span>
       </div>
       <div class="flex items-center gap-3 w-full md:w-auto">
-        <a href="tel:+13865551234" class="hidden sm:flex liquid-glass rounded-xl px-5 py-2.5 text-sm font-medium text-white font-body items-center gap-2 hover:bg-white/10 transition-colors">
+        <a href="tel:+13865551234" class="flex sm:flex liquid-glass rounded-xl px-4 sm:px-5 py-2.5 text-sm font-medium text-white font-body items-center gap-2 hover:bg-white/10 transition-colors">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Call Now
+          <span class="hidden sm:inline">Call Now</span>
         </a>
-        <a href="/pages/book.html" class="flex-1 md:flex-none bg-brand-gold text-white rounded-xl px-6 py-2.5 text-sm font-semibold font-body text-center flex items-center justify-center gap-2 hover:brightness-110 transition-all">
+        <a href="/pages/book.html" class="flex-1 md:flex-none bg-brand-gold text-white rounded-xl px-5 sm:px-6 py-2.5 text-sm font-semibold font-body text-center flex items-center justify-center gap-2 hover:brightness-110 transition-all">
           Book Genetic Test
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>

@@ -276,41 +276,82 @@ a:focus-visible, button:focus-visible {
 }
 
 /* ═══ MOBILE RESPONSIVE FIXES ═══ */
-@media (max-width: 639px) {
-  /* Reduce hero top padding on subpages (pt-48 = 12rem is too much) */
-  section[class*="pt-48"] { padding-top: 7rem !important; }
-  section[class*="pt-32"] { padding-top: 5.5rem !important; }
 
-  /* Scale down stat numbers that overflow on small screens */
+/* -- Sticky CTA footer clearance (all mobile sizes) -- */
+footer { padding-bottom: 4.5rem !important; }
+
+/* -- Reduce backdrop-filter on mobile to prevent render glitches -- */
+@media (max-width: 767px) {
+  .liquid-glass-strong {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+}
+
+@media (max-width: 639px) {
+  /* Reduce hero top padding on subpages */
+  section[class*="pt-48"] { padding-top: 7rem !important; }
+  section[class*="pt-40"] { padding-top: 6rem !important; }
+  section[class*="pt-32"] { padding-top: 5rem !important; }
+
+  /* Scale down stat numbers that overflow containers */
   .font-heading.italic.text-5xl {
-    font-size: 2rem;
+    font-size: clamp(1.25rem, 5vw, 2rem);
     word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.1;
   }
 
-  /* Stat grid boxes need less padding on mobile */
+  /* Stat grid boxes: tighter padding */
   .grid-cols-2 > div[class*="rounded-2xl"][class*="p-6"],
   .grid > div[class*="rounded-2xl"][class*="p-6"] {
-    padding: 1rem;
+    padding: 0.75rem;
+  }
+
+  /* 2-col stat grids with 4-col desktop: stack to 1 col on small phones */
+  .grid-cols-2.md\:grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   /* Tighten h1 on subpages */
-  h1.text-5xl, h1[class*="text-5xl"] {
-    font-size: 2.25rem;
+  h1[class*="text-5xl"] {
+    font-size: 2rem !important;
     letter-spacing: -1px;
   }
 
-  /* Ensure long service page headings don't overflow */
+  /* Ensure headings don't overflow */
   h1, h2 {
     overflow-wrap: break-word;
     word-wrap: break-word;
   }
 
-  /* Add bottom padding so sticky CTA doesn't cover footer content */
-  footer { padding-bottom: 4.5rem !important; }
-
-  /* Prevent horizontal overflow from any wide elements */
+  /* Prevent horizontal overflow from wide containers */
   .max-w-7xl, .max-w-5xl, .max-w-3xl, .max-w-2xl {
     max-width: 100%;
+  }
+
+  /* Min-height on tall hero sections too aggressive on small screens */
+  section[class*="min-h-[80vh]"] {
+    min-height: 0 !important;
+  }
+}
+
+/* iPhone SE / very small screens (375px and below) */
+@media (max-width: 389px) {
+  /* Stat grids: force single column when content is word-based */
+  .grid-cols-2.md\:grid-cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  /* Even tighter stat font */
+  .font-heading.italic.text-5xl {
+    font-size: 1.15rem;
+  }
+
+  /* Carousel cards: reduce min-height */
+  .carousel-card {
+    min-height: 420px !important;
   }
 }
 
