@@ -66,9 +66,9 @@ function renderNav(activePage) {
   let topBar = `
     <div class="hidden lg:flex items-center justify-between px-8 lg:px-16 py-1 border-b border-white/5 text-xs font-body text-white/60">
       <div class="flex items-center gap-6">
-        <a href="tel:+13865551234" class="hover:text-brand-gold transition-colors flex items-center gap-1.5">
+        <a href="tel:+13867323003" class="hover:text-brand-gold transition-colors flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          (386) 555-1234
+          (386) 732-3003
         </a>
         <span class="flex items-center gap-1.5">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -76,7 +76,7 @@ function renderNav(activePage) {
         </span>
       </div>
       <div class="flex items-center gap-4">
-        <a href="#" class="hover:text-brand-gold transition-colors">Monthly Specials</a>
+        <a href="/pages/presale.html" class="hover:text-brand-gold transition-colors font-semibold">Unlock Discounted Pricing Now</a>
         <span class="text-white/20">|</span>
         <a href="#" class="hover:text-brand-gold transition-colors">Patient Portal</a>
         <span class="text-white/20">|</span>
@@ -214,13 +214,13 @@ function renderFooter() {
             <a href="/pages/about.html" class="text-sm text-white/50 font-body hover:text-brand-gold transition-colors">About Us</a>
             <a href="#" class="text-sm text-white/50 font-body hover:text-brand-gold transition-colors">The Science</a>
             <a href="#" class="text-sm text-white/50 font-body hover:text-brand-gold transition-colors">Results</a>
-            <a href="#" class="text-sm text-white/50 font-body hover:text-brand-gold transition-colors">Monthly Specials</a>
+            <a href="/pages/presale.html" class="text-sm text-white/50 font-body hover:text-brand-gold transition-colors">Pre-Sale Packages</a>
           </div>
         </div>
         <div>
           <h4 class="text-xs font-body font-semibold text-white/80 mb-3 tracking-widest uppercase">Contact</h4>
           <div class="flex flex-col gap-2">
-            <a href="tel:+13865551234" class="text-sm text-white/50 font-body hover:text-brand-gold transition-colors">(386) 555-1234</a>
+            <a href="tel:+13867323003" class="text-sm text-white/50 font-body hover:text-brand-gold transition-colors">(386) 732-3003</a>
             <a href="mailto:info@bluezoneyou.com" class="text-sm text-white/50 font-body hover:text-brand-gold transition-colors">info@bluezoneyou.com</a>
             <span class="text-sm text-white/50 font-body">Daytona Beach, FL</span>
           </div>
@@ -249,11 +249,17 @@ function renderStickyCTA() {
   if (!cta) return;
 
   cta.innerHTML = `
-    <div class="px-4 sm:px-6 lg:px-16 py-3">
-      <a href="/pages/book.html" class="block w-full bg-brand-gold text-white rounded-xl py-3.5 text-sm font-semibold font-body text-center flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg shadow-brand-gold/25">
-        Book a Genetic Test
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
+    <div class="flex items-center justify-between px-4 sm:px-6 lg:px-16 py-3">
+      <div class="hidden md:flex items-center gap-3">
+        <img src="/bzy-icon-white.png" alt="" class="w-7 h-7 object-contain" />
+        <span class="text-sm text-white font-body font-semibold">Limited Pre-Sale Pricing Available</span>
+      </div>
+      <div class="flex items-center gap-3 w-full md:w-auto">
+        <a href="/pages/presale.html" class="flex-1 md:flex-none bg-brand-dark text-white rounded-xl px-6 py-2.5 text-sm font-bold font-body text-center flex items-center justify-center gap-2 hover:bg-brand-dark/80 transition-all shadow-lg">
+          Unlock Discounted Pricing
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M7 17L17 7M7 7h10v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
     </div>`;
 
   window.addEventListener('scroll', () => {
