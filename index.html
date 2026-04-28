@@ -35,7 +35,7 @@
       z-index: 1;
     }
     @media (max-width: 767px) {
-      .scroll-spacer { height: 300vh; }
+      .scroll-spacer { height: auto; min-height: 300vh; }
     }
 
     /* Section overlays on the canvas */
@@ -51,9 +51,9 @@
     }
     @media (max-width: 767px) {
       .canvas-section {
-        height: 75vh;
-        min-height: 500px;
-        padding: 1rem;
+        height: auto;
+        min-height: 100vh;
+        padding: 1.5rem 1rem;
       }
     }
 
@@ -587,8 +587,9 @@
 
     function onScroll() {
       const scrollTop = window.scrollY;
-      // Map scroll within spacer range to frames (300vh mobile, 400vh desktop).
-      const spacerHeight = window.innerHeight * (isMobile ? 3 : 4);
+      // Map scroll within spacer range to frames.
+      const spacer = document.querySelector('.scroll-spacer');
+      const spacerHeight = spacer ? spacer.offsetHeight : window.innerHeight * 4;
       const scrollFraction = Math.min(Math.max(scrollTop / spacerHeight, 0), 1);
       targetFrame = Math.floor(scrollFraction * (frameIndices.length - 1));
     }
