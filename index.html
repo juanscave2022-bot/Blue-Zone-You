@@ -180,20 +180,7 @@
     .demo-video-wrap video {
       width: 100%; height: 100%;
       object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.5s ease;
     }
-    .demo-video-wrap video.playing { opacity: 1; }
-    .demo-video-wrap .video-poster {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      background: rgba(15,27,51,0.6);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: opacity 0.5s ease;
-      pointer-events: none;
-    }
-    .demo-video-wrap .video-poster.hidden-poster { opacity: 0; }
   </style>
 </head>
 <body>
@@ -299,15 +286,12 @@
           <!-- Right: Video + Glass Toggle -->
           <div class="flex flex-col items-center gap-5">
             <div class="demo-video-wrap w-full max-w-[260px] lg:max-w-[280px]">
-              <video id="demo-video" muted loop playsinline preload="metadata">
+              <video id="demo-video" muted playsinline preload="auto" class="playing">
                 <source src="/automation-demo.mp4" type="video/mp4" />
               </video>
-              <div class="video-poster" id="demo-poster">
-                <svg class="w-10 h-10 text-white/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="6,4 20,12 6,20" fill="currentColor" stroke="none"/></svg>
-              </div>
             </div>
             <div class="flex items-center gap-3">
-              <span class="text-xs text-white/40 font-body uppercase tracking-widest" id="toggle-label">Preview</span>
+              <span class="text-xs text-white/40 font-body uppercase tracking-widest" id="toggle-label">Before</span>
               <button class="glass-toggle" id="demo-toggle" aria-label="Toggle automation demo"></button>
             </div>
           </div>
@@ -733,36 +717,38 @@
   (function() {
     var toggle = document.getElementById('demo-toggle');
     var video = document.getElementById('demo-video');
-    var poster = document.getElementById('demo-poster');
     var label = document.getElementById('toggle-label');
     if (!toggle || !video) return;
 
-    var playing = false;
+    var active = false;
 
-    toggle.addEventListener('click', function() {
-      playing = !playing;
-      toggle.classList.toggle('active', playing);
-      if (playing) {
-        video.play();
-        video.classList.add('playing');
-        if (poster) poster.classList.add('hidden-poster');
-        if (label) label.textContent = 'Playing';
-      } else {
-        video.pause();
-        video.classList.remove('playing');
-        if (poster) poster.classList.remove('hidden-poster');
-        if (label) label.textContent = 'Preview';
-      }
+    // Pause at first frame on load
+    video.addEventListener('loadeddata', function() {
+      video.currentTime = 0;
+      video.pause();
     });
 
-    // Also allow tapping the video poster to start
-    if (poster) {
-      poster.style.cursor = 'pointer';
-      poster.style.pointerEvents = 'auto';
-      poster.addEventListener('click', function() {
-        if (!playing) toggle.click();
-      });
-    }
+    // When video reaches the end, stay there
+    video.addEventListener('ended', function() {
+      video.pause();
+    });
+
+    toggle.addEventListener('click', function() {
+      active = !active;
+      toggle.classList.toggle('active', active);
+
+      if (active) {
+        // Play forward from start to end
+        video.currentTime = 0;
+        video.play();
+        if (label) label.textContent = 'After';
+      } else {
+        // Reset to first frame
+        video.pause();
+        video.currentTime = 0;
+        if (label) label.textContent = 'Before';
+      }
+    });
   })();
   </script>
 </body>
